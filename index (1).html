@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>2Fly Run Club — KL</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0a0a0a;
+      --white: #f5f2ec;
+      --accent: #e8ff47;
+      --muted: rgba(245,242,236,0.55);
+      --card-bg: rgba(10,10,10,0.72);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* ── HERO ─────────────────────────────── */
+    .hero {
+      position: relative;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 6vw 8vh;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to top, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.45) 45%, rgba(10,10,10,0.2) 100%),
+        url("https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=1800&auto=format&fit=crop&q=80") center center / cover no-repeat;
+      z-index: 0;
+    }
+
+    /* subtle grain */
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.35;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero-content { position: relative; z-index: 2; max-width: 820px; }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.78rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 1.4rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+    .eyebrow span { display: inline-block; width: 32px; height: 1px; background: var(--accent); }
+
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(5rem, 13vw, 11rem);
+      line-height: 0.92;
+      letter-spacing: 0.01em;
+      color: var(--white);
+      margin-bottom: 1.8rem;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.4s forwards;
+    }
+    h1 em {
+      font-style: normal;
+      color: var(--accent);
+      display: block;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2.4rem;
+      margin-bottom: 2.8rem;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.6s forwards;
+    }
+    .meta-item { display: flex; flex-direction: column; gap: 3px; }
+    .meta-label { font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+    .meta-value { font-size: 1rem; font-weight: 500; color: var(--white); }
+
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.8s forwards;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 1rem 2rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: var(--black);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(232,255,71,0.35); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--white);
+      border: 1px solid rgba(245,242,236,0.3);
+    }
+    .btn-ghost:hover { border-color: var(--white); transform: translateY(-2px); }
+
+    /* ── ABOUT ─────────────────────────────── */
+    section { padding: 10vh 6vw; }
+
+    .about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+      border-top: 1px solid rgba(245,242,236,0.1);
+    }
+
+    .about-tag {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.2rem;
+    }
+
+    h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.8rem, 5vw, 4.5rem);
+      line-height: 1;
+      letter-spacing: 0.02em;
+      margin-bottom: 1.6rem;
+    }
+
+    .about p {
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--muted);
+      max-width: 460px;
+    }
+
+    .pillars {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .pillar {
+      background: rgba(245,242,236,0.04);
+      border: 1px solid rgba(245,242,236,0.08);
+      padding: 1.6rem;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .pillar:hover {
+      border-color: var(--accent);
+      background: rgba(232,255,71,0.04);
+    }
+
+    .pillar-icon { font-size: 1.6rem; margin-bottom: 0.8rem; }
+    .pillar-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+    .pillar-text { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+
+    /* ── EVENT DETAILS ─────────────────────── */
+    .details {
+      background: rgba(245,242,236,0.02);
+      border-top: 1px solid rgba(245,242,236,0.1);
+      border-bottom: 1px solid rgba(245,242,236,0.1);
+    }
+
+    .details-inner {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+
+    .detail-card {
+      padding: 4rem 2.5rem;
+      border-right: 1px solid rgba(245,242,236,0.08);
+      transition: background 0.3s;
+    }
+    .detail-card:last-child { border-right: none; }
+    .detail-card:hover { background: rgba(232,255,71,0.04); }
+
+    .detail-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 4rem;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .detail-label { font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.8rem; }
+    .detail-desc { font-size: 0.95rem; color: var(--white); line-height: 1.6; }
+
+    /* ── CONTACT ───────────────────────────── */
+    .contact { border-top: 1px solid rgba(245,242,236,0.1); }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 6rem;
+      align-items: start;
+    }
+
+    .contact-left p {
+      color: var(--muted);
+      line-height: 1.75;
+      margin-top: 1.2rem;
+      font-size: 1rem;
+    }
+
+    .form { display: flex; flex-direction: column; gap: 1.2rem; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+
+    .field { display: flex; flex-direction: column; gap: 0.5rem; }
+    .field label { font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+    .field input, .field textarea, .field select {
+      background: rgba(245,242,236,0.05);
+      border: 1px solid rgba(245,242,236,0.12);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      padding: 0.9rem 1rem;
+      outline: none;
+      transition: border-color 0.25s;
+      -webkit-appearance: none;
+    }
+    .field input:focus, .field textarea:focus, .field select:focus {
+      border-color: var(--accent);
+    }
+    .field textarea { resize: vertical; min-height: 130px; }
+    .field select option { background: #1a1a1a; }
+
+    .form-note { font-size: 0.78rem; color: var(--muted); }
+
+    /* success state */
+    .success-msg {
+      display: none;
+      padding: 1.2rem 1.6rem;
+      background: rgba(232,255,71,0.1);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── FOOTER ────────────────────────────── */
+    footer {
+      padding: 3rem 6vw;
+      border-top: 1px solid rgba(245,242,236,0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-brand { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 0.08em; }
+    .footer-brand span { color: var(--accent); }
+    .footer-copy { font-size: 0.78rem; color: var(--muted); letter-spacing: 0.06em; }
+
+    /* ── ANIMATIONS ────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── RESPONSIVE ────────────────────────── */
+    @media (max-width: 860px) {
+      .about { grid-template-columns: 1fr; gap: 3rem; }
+      .details-inner { grid-template-columns: 1fr; }
+      .detail-card { border-right: none; border-bottom: 1px solid rgba(245,242,236,0.08); }
+      .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .form-row { grid-template-columns: 1fr; }
+      .pillars { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="eyebrow"><span></span> Kuala Lumpur · April 2025</div>
+    <h1>2Fly<em>Run Club</em></h1>
+    <div class="hero-meta">
+      <div class="meta-item">
+        <span class="meta-label">Date</span>
+        <span class="meta-value">1st April 2025</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Location</span>
+        <span class="meta-value">KLCC Park, KL — TBC</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Focus</span>
+        <span class="meta-value">Run · Strength · Community</span>
+      </div>
+    </div>
+    <div class="hero-cta">
+      <a href="#contact" class="btn btn-primary">Join the Club ↓</a>
+      <a href="#about" class="btn btn-ghost">Learn More</a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="about reveal">
+  <div class="about-text">
+    <p class="about-tag">Who We Are</p>
+    <h2>More Than a<br>Morning Run</h2>
+    <p>2Fly Run Club is KL's home for runners who want to go further — not just in distance, but in strength and community. We blend road running with targeted strength training so every member shows up fitter, faster, and ready to fly.</p>
+  </div>
+  <div class="pillars">
+    <div class="pillar">
+      <div class="pillar-icon">🏃</div>
+      <div class="pillar-title">Run Together</div>
+      <div class="pillar-text">Group runs through the iconic streets and parks of KL, all paces welcome.</div>
+    </div>
+    <div class="pillar">
+      <div class="pillar-icon">💪</div>
+      <div class="pillar-title">Strength Work</div>
+      <div class="pillar-text">Integrated bodyweight & resistance training to build a resilient runner's body.</div>
+    </div>
+    <div class="pillar">
+      <div class="pillar-icon">🌆</div>
+      <div class="pillar-title">KL Vibes</div>
+      <div class="pillar-text">Set against the skyline of KLCC park — there's no better backdrop to push your limits.</div>
+    </div>
+    <div class="pillar">
+      <div class="pillar-icon">🤝</div>
+      <div class="pillar-title">Community</div>
+      <div class="pillar-text">A tight-knit crew that motivates, celebrates, and keeps each other accountable.</div>
+    </div>
+  </div>
+</section>
+
+<!-- EVENT DETAILS -->
+<section class="details reveal">
+  <div class="details-inner">
+    <div class="detail-card">
+      <div class="detail-num">01</div>
+      <div class="detail-label">Date</div>
+      <div class="detail-desc">Tuesday, 1st April 2025.<br>Morning session — exact time TBA.</div>
+    </div>
+    <div class="detail-card">
+      <div class="detail-num">02</div>
+      <div class="detail-label">Location</div>
+      <div class="detail-desc">KLCC Park, Kuala Lumpur.<br>Final meetup point to be confirmed.</div>
+    </div>
+    <div class="detail-card">
+      <div class="detail-num">03</div>
+      <div class="detail-label">What to Expect</div>
+      <div class="detail-desc">Warm-up, group run, strength circuit, cooldown & social.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact">
+  <div class="contact-grid">
+    <div class="contact-left reveal">
+      <p class="about-tag">Get Involved</p>
+      <h2>Ready to<br>Fly With Us?</h2>
+      <p>Fill in the form and we'll be in touch with everything you need to know before race day. All fitness levels are welcome — if you can move, you belong here.</p>
+    </div>
+    <div class="reveal">
+      <div class="success-msg" id="successMsg">✓ &nbsp; Message received! We'll be in touch soon.</div>
+      <form class="form" id="contactForm">
+        <div class="form-row">
+          <div class="field">
+            <label for="fname">First Name</label>
+            <input id="fname" type="text" placeholder="Ahmad" required />
+          </div>
+          <div class="field">
+            <label for="lname">Last Name</label>
+            <input id="lname" type="text" placeholder="Razif" required />
+          </div>
+        </div>
+        <div class="field">
+          <label for="email">Email Address</label>
+          <input id="email" type="email" placeholder="you@email.com" required />
+        </div>
+        <div class="field">
+          <label for="level">Running Level</label>
+          <select id="level">
+            <option value="">Select your level…</option>
+            <option>Beginner (just starting out)</option>
+            <option>Intermediate (run regularly)</option>
+            <option>Advanced (races & PBs)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="msg">Anything else? (optional)</label>
+          <textarea id="msg" placeholder="Questions, dietary needs, how you heard about us…"></textarea>
+        </div>
+        <p class="form-note">We'll only use your details to send you 2Fly updates. No spam, ever.</p>
+        <button type="submit" class="btn btn-primary">Send My Details →</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">2Fly<span>.</span></div>
+  <div class="footer-copy">© 2025 2Fly Run Club · Kuala Lumpur</div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => io.observe(el));
+
+  // Form submit (demo)
+  document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    this.style.display = 'none';
+    document.getElementById('successMsg').style.display = 'block';
+  });
+
+  // Smooth anchor scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+</body>
+</html>
